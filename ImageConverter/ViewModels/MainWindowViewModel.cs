@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ImageConverter.Models;
 using ImageConverter.Services;
 
 namespace ImageConverter.ViewModels;
@@ -26,6 +27,18 @@ public partial class MainWindowViewModel : ViewModelBase
         OutputPath = await OpenFile(true) ?? "";
     }
 
+    [RelayCommand]
+    private async Task Convert()
+    {
+        await Converter.ConvertImage(InputPath, OutputPath);
+    }
+
+    [RelayCommand]
+    private static void QuitProgram()
+    {
+        Environment.Exit(0);
+    }
+
     private static async Task<string?> OpenFile(bool save)
     {
         try
@@ -42,12 +55,12 @@ public partial class MainWindowViewModel : ViewModelBase
             if (save)
             {
                 file = await fileService.SaveFile();
-                return file?.Path.AbsolutePath;
+                return file?.TryGetLocalPath();
                 
             }
             
             file = await fileService.OpenFile();
-            return file?.Path.AbsolutePath;
+            return file?.TryGetLocalPath();
         }
         catch (Exception e)
         {
