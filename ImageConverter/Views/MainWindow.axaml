@@ -38,15 +38,15 @@
     <DockPanel>
         <!-- Bottom buttons. -->
         <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center" Orientation="Horizontal">
-            <Button Classes="ConvertButton">Quit</Button>
-            <Button Classes="ConvertButton">Convert</Button>
+            <Button Classes="ConvertButton" Command="{Binding QuitProgramCommand}">Quit</Button>
+            <Button Classes="ConvertButton" Command="{Binding ConvertCommand}">Convert</Button>
         </StackPanel>
 
         <!-- File input section -->
         <Grid ColumnDefinitions="75,*,50" RowDefinitions="*,*">
             <Label   Classes="File" Grid.Row="0" Grid.Column="0">Input File:</Label>
             <TextBox Classes="File" Grid.Row="0" Grid.Column="1"  Text="{Binding InputPath}" />
-            <Button  Classes="File" Grid.Row="0" Grid.Column="2" Command="{Binding Path=ChooseInputFileCommand}">…</Button>
+            <Button  Classes="File" Grid.Row="0" Grid.Column="2" Command="{Binding ChooseInputFileCommand}">…</Button>
 
             <Label   Classes="File" Grid.Row="1" Grid.Column="0">Output File:</Label>
             <TextBox Classes="File" Grid.Row="1" Grid.Column="1" Text="{Binding OutputPath}" />

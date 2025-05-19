@@ -26,6 +26,18 @@ public partial class MainWindowViewModel : ViewModelBase
         OutputPath = await OpenFile(true) ?? "";
     }
 
+    [RelayCommand]
+    private async Task Convert()
+    { 
+        //TODO
+    }
+
+    [RelayCommand]
+    private static void QuitProgram()
+    {
+        Environment.Exit(0);
+    }
+
     private static async Task<string?> OpenFile(bool save)
     {
         try
