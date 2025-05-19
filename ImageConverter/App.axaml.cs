@@ -1,16 +1,22 @@
+using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using Avalonia.Markup.Xaml;
+using ImageConverter.Services;
 using ImageConverter.ViewModels;
 using ImageConverter.Views;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ImageConverter;
 
 public partial class App : Application
 {
+    public IServiceProvider? ServiceProvider { get; private set; }
+    public new static App? Current => Application.Current as App;
+    
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -27,6 +33,10 @@ public partial class App : Application
             {
                 DataContext = new MainWindowViewModel(),
             };
+
+            var services = new ServiceCollection();
+            services.AddSingleton<FileService>(x => new FileService(desktop.MainWindow));
+            ServiceProvider = services.BuildServiceProvider();
         }
 
         base.OnFrameworkInitializationCompleted();
