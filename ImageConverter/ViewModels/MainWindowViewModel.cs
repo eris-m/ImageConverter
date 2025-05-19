@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ImageConverter.Services;
@@ -16,16 +17,16 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private async Task ChooseInputFile()
     {
-        InputPath = await OpenFile() ?? "";
+        InputPath = await OpenFile(false) ?? "";
     }
 
     [RelayCommand]
     private async Task ChooseOutputFile()
     {
-        OutputPath = await OpenFile() ?? "";
+        OutputPath = await OpenFile(true) ?? "";
     }
 
-    private static async Task<string?> OpenFile()
+    private static async Task<string?> OpenFile(bool save)
     {
         try
         {
@@ -35,8 +36,17 @@ public partial class MainWindowViewModel : ViewModelBase
         
             if (service is not FileService fileService)
                 throw new Exception("File service not FileService!");
-        
-            var file = await fileService.OpenFile();
+
+            IStorageFile? file;
+            
+            if (save)
+            {
+                file = await fileService.SaveFile();
+                return file?.Path.AbsolutePath;
+                
+            }
+            
+            file = await fileService.OpenFile();
             return file?.Path.AbsolutePath;
         }
         catch (Exception e)

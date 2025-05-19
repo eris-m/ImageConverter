@@ -16,9 +16,27 @@ public class FileService
 
     public async Task<IStorageFile?> OpenFile()
     {
-        var options = new FilePickerOpenOptions();
+        var options = new FilePickerOpenOptions
+        {
+            Title = "Open Input - ImageConverter",
+            AllowMultiple = false,
+            FileTypeFilter = [FilePickerFileTypes.ImageAll]
+        };
+        
         var files = await _window.StorageProvider.OpenFilePickerAsync(options);
 
         return files.Any() ? files[0] : null;
+    }
+
+    public async Task<IStorageFile?> SaveFile()
+    {
+        var options = new FilePickerSaveOptions
+        {
+            Title = "Output - ImageConverter",
+            FileTypeChoices = [FilePickerFileTypes.ImageAll],
+            ShowOverwritePrompt = true
+        };
+
+        return await _window.StorageProvider.SaveFilePickerAsync(options);
     }
 }
